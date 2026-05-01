@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom Scheduler – Aditya University LMS</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    body {
+      padding-top: 64px;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    .preview-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 64px - 80px);
+      padding: 20px;
+    }
+
+    .preview-area h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .preview-area img {
+      max-width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+    }
+
+    .preview-area p {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    /* Fixed bottom upload bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 14px 28px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      box-shadow: 0 -4px 20px rgba(49, 46, 129, 0.3);
+      z-index: 100;
+    }
+
+    .bottom-bar label {
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 600;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .bottom-bar input[type="file"] {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .bottom-bar input[type="file"]::file-selector-button {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .save-btn {
+      background: #fff;
+      color: var(--primary);
+      border: none;
+      border-radius: 30px;
+      padding: 10px 24px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .save-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .save-btn:disabled {
+      background: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.6);
+      cursor: not-allowed;
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+
+  <div class="lms-sub-header">
+    <a class="back-btn" href="home.html">← Back</a>
+    📅 Classroom Scheduler
+  </div>
+
+  <div class="preview-area" id="previewArea">
+    <p>Loading timetable…</p>
+  </div>
+
+  <div class="bottom-bar">
+    <label>Upload Timetable:</label>
+    <input type="file" id="imageInput" accept="image/*" />
+    <button class="save-btn" id="saveBtn" onclick="saveTimetable()">Save Timetable</button>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC_2TxTMSQLB7prweEil2frOziR8Pfc58I",
+      authDomain: "chatapp-1df97.firebaseapp.com",
+      projectId: "chatapp-1df97",
+      storageBucket: "chatapp-1df97.appspot.com",
+      messagingSenderId: "498191405509",
+      appId: "1:498191405509:web:c48ef3a1c599a02a1d3bac",
+      measurementId: "G-Y0VN62FG0N"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const imageInput = document.getElementById("imageInput");
+    const previewArea = document.getElementById("previewArea");
+    const saveBtn = document.getElementById("saveBtn");
+
+    function getUserId() {
+      const user = firebase.auth().currentUser;
+      if (user) return user.uid;
+      return localStorage.getItem("chat_uid") || null;
+    }
+
+    function showPreview(imageUrl) {
+      previewArea.innerHTML = `<h3>Your Timetable</h3><img src="${imageUrl}" alt="Timetable" />`;
+    }
+
+    function loadTimetable() {
+      const uid = getUserId();
+      if (!uid) { previewArea.innerHTML = "<p>Please login to view your timetable.</p>"; return; }
+      previewArea.innerHTML = "<p>Loading…</p>";
+      db.collection("timetables").doc(uid).get().then(doc => {
+        if (doc.exists && doc.data().imageUrl) showPreview(doc.data().imageUrl);
+        else previewArea.innerHTML = "<p>No timetable uploaded yet. Upload one below!</p>";
+      }).catch(() => { previewArea.innerHTML = "<p>Error loading timetable.</p>"; });
+    }
+
+    async function saveTimetable() {
+      const file = imageInput.files[0];
+      if (!file) { alert("Please select an image."); return; }
+      const uid = getUserId();
+      if (!uid) { alert("Please login to upload your timetable."); return; }
+      saveBtn.disabled = true; saveBtn.textContent = "Saving…";
+      try {
+        const url = 'https://api.cloudinary.com/v1_1/dwmvjidwz/image/upload';
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', 'classroom-scheduler');
+        const response = await fetch(url, { method: 'POST', body: formData });
+        const data = await response.json();
+        if (!data.secure_url) throw new Error("Cloudinary upload failed");
+        await db.collection("timetables").doc(uid).set({ imageUrl: data.secure_url });
+        showPreview(data.secure_url);
+        imageInput.value = "";
+      } catch (err) { alert("Error uploading timetable: " + err.message); }
+      saveBtn.disabled = false; saveBtn.textContent = "Save Timetable";
+    }
+
+    window.addEventListener("load", loadTimetable);
+    firebase.auth().onAuthStateChanged(loadTimetable);
+  </script>
+</body>
+
+</html>

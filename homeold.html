@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Subject Portal</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      color: #333;
+    }
+
+    header {
+      background: #003366;
+      color: white;
+      padding: 15px 30px 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .logo-title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      gap: 40px;
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ccc;
+    }
+
+    .login-button {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: #fff;
+      color: #003366;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-button:hover {
+      background: #ccc;
+    }
+
+    .content {
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2 {
+      margin-top: 40px;
+      color: #003366;
+    }
+
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  flex: 1 1 calc(33.333% - 20px);
+  max-width: calc(33.333% - 20px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 500px; /* Increased to fit taller image */
+}
+
+.card-image {
+  width: auto;
+  height: auto; /* Perfect for 3:2 ratio display */
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 20px;
+  border-top: 1px solid #eee;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-content h3 {
+  margin: 0;
+  color: #003366;
+  font-size: 20px;
+}
+
+.more-info-toggle {
+  margin-top: 10px;
+  cursor: pointer;
+  color: #003366;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+}
+
+.go-link {
+  display: inline-block;
+  margin-top: 15px;
+  background: #003366;
+  color: white;
+  padding: 10px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.go-link:hover {
+  background: #002855;
+}
+    @media (max-width: 900px) {
+      .card {
+        flex-basis: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        flex-basis: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-title">
+      <img src="images/aditya_university.png" alt="Aditya University Logo" class="logo" />
+      <div class="title">Aditya University</div>
+    </div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+    <button class="login-button" onclick="logout()">Logout</button>
+  </header>
+
+  <div class="content">
+    <h2>Subject Portal</h2>
+    <div class="card-container">
+      <div class="card">
+        <img src="images/comingsoon.png" alt="Math" class="card-image" />
+        <div class="card-content">
+          <h3>Mathematics</h3>
+          <div class="provider">By Dr. A. John Doe</div>
+          <div class="description">Explore algebra, calculus, and geometry lessons.</div>
+          <a href="lms.html" class="go-link">Go to Subject</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/comingsoon.png" alt="Physics" class="card-image" />
+        <div class="card-content">
+          <h3>Physics</h3>
+          <div class="provider">By Dr. A. John Doe</div>
+          <div class="description">Dive into mechanics, electricity, and thermodynamics.</div>
+          <a href="lms.html" class="go-link">Go to Subject</a>
+        </div>
+      </div>
+
+       <div class="card">
+        <img src="images/comingsoon.png" alt="Physics" class="card-image" />
+        <div class="card-content">
+          <h3>Advanced Physics</h3>
+          <div class="provider">By Dr. A. John Doe</div>
+          <div class="description">Dive into mechanics, electricity, and thermodynamics.</div>
+          <a href="lms.html" class="go-link">Go to Subject</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/comingsoon.png" alt="Chemistry" class="card-image" />
+        <div class="card-content">
+          <h3>Chemistry</h3>
+          <div class="provider">By Dr. A. John Doe</div>
+          <div class="description">Understand reactions, compounds, and equations.</div>
+          <a href="lms.html" class="go-link">Go to Subject</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/comingsoon.png" alt="Computer Science" class="card-image" />
+        <div class="card-content">
+          <h3>Computer Science</h3>
+          <div class="provider">By Dr. A. John Doe</div>
+          <div class="description">Learn programming, AI, and data structures.</div>
+          <a href="lms.html" class="go-link">Go to Subject</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/comingsoon.png" alt="English" class="card-image" />
+        <div class="card-content">
+          <h3>English</h3>
+          <div class="provider">By Dr. A. John Doe</div>
+          <div class="description">Improve grammar, communication, and literary analysis skills.</div>
+          <a href="lms.html" class="go-link">Go to Subject</a>
+        </div>
+      </div>
+    </div>
+
+    <h2>Academic Enhancement Center</h2>
+    <div class="card-container">
+      <div class="card">
+        <img src="images/ereference.png" alt="E-Reference" class="card-image" />
+        <div class="card-content">
+          <h3>E-Reference</h3>
+          <div class="provider">By Academic Dept.</div>
+          <div class="description">
+            Access a digital library of textbooks, journals, and scholarly resources at your fingertips.
+          </div>
+          <a href="ereference.html" class="go-link">Go to E-Reference</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="images/classroom-scheduler.png" alt="Classroom Scheduler" class="card-image" />
+        <div class="card-content">
+          <h3>Classroom Scheduler</h3>
+          <div class="provider">By Admin Coordinator</div>
+          <div class="description">
+            Organize, plan, and manage your classroom schedules with ease and flexibility.
+          </div>
+          <a href="classroom-scheduler.html" class="go-link">Go to Scheduler</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="images/comingsoon.png" alt="Coming Soon" class="card-image" />
+        <div class="card-content">
+          <h3>Coming Soon</h3>
+          <div class="provider">By Admin Coordinator</div>
+          <div class="description">
+            Organize, plan, and manage your classroom schedules with ease and flexibility.
+          </div>
+          <a href="classroom-scheduler.html" class="go-link">Go to Scheduler</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function logout() {
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

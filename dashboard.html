@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard – Aditya University LMS</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    .dash-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 22px;
+      padding-bottom: 50px;
+    }
+
+    /* Each metric card gets a unique gradient strip on top */
+    .metric-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 22px 24px;
+      box-shadow: 0 4px 20px rgba(79, 70, 229, 0.08);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 36px rgba(79, 70, 229, 0.15);
+    }
+
+    .m-indigo::before {
+      background: linear-gradient(90deg, #4F46E5, #818CF8);
+    }
+
+    .m-orange::before {
+      background: linear-gradient(90deg, #F97316, #FBBF24);
+    }
+
+    .m-violet::before {
+      background: linear-gradient(90deg, #7C3AED, #C026D3);
+    }
+
+    .m-teal::before {
+      background: linear-gradient(90deg, #0D9488, #06B6D4);
+    }
+
+    .m-rose::before {
+      background: linear-gradient(90deg, #E11D48, #F97316);
+    }
+
+    .m-amber::before {
+      background: linear-gradient(90deg, #D97706, #FBBF24);
+    }
+
+    .m-sky::before {
+      background: linear-gradient(90deg, #0284C7, #0D9488);
+    }
+
+    .metric-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="lms-header">
+    <div class="lms-logo-title">
+      <img src="images/aditya_university.png" alt="Aditya University Logo" class="lms-logo" />
+      <div class="lms-title">Aditya University</div>
+    </div>
+    <nav class="lms-nav">
+      <a href="home.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <button class="lms-action-btn" onclick="logout()">Logout</button>
+  </header>
+
+  <div class="lms-container">
+    <h2 class="lms-section-title">📊 Student Dashboard</h2>
+
+    <div class="dash-grid">
+      <div class="metric-card m-indigo">
+        <div class="metric-icon">👤</div>
+        <div class="metric-label">Username</div>
+        <div class="metric-value" id="username" style="font-size:20px;">-</div>
+      </div>
+      <div class="metric-card m-orange">
+        <div class="metric-icon">🏫</div>
+        <div class="metric-label">Classes Attended</div>
+        <div class="metric-value" id="classesAttended">0</div>
+      </div>
+      <div class="metric-card m-violet">
+        <div class="metric-icon">🎬</div>
+        <div class="metric-label">Videos Watched</div>
+        <div class="metric-value" id="videosWatched">0</div>
+      </div>
+      <div class="metric-card m-teal">
+        <div class="metric-icon">⏱️</div>
+        <div class="metric-label">Total Watch Time</div>
+        <div class="metric-value" id="watchTime">0 mins</div>
+      </div>
+      <div class="metric-card m-rose">
+        <div class="metric-icon">🕒</div>
+        <div class="metric-label">Time on Pages</div>
+        <div class="metric-value" id="timeSpent">0 mins</div>
+      </div>
+      <div class="metric-card m-amber">
+        <div class="metric-icon">📊</div>
+        <div class="metric-label">Polls Participated</div>
+        <div class="metric-value" id="polls">0</div>
+      </div>
+      <div class="metric-card m-sky">
+        <div class="metric-icon">🎯</div>
+        <div class="metric-label">Poll Performance</div>
+        <div class="metric-value" id="pollPerformance">0%</div>
+      </div>
+      <div class="metric-card m-indigo">
+        <div class="metric-icon">⚡</div>
+        <div class="metric-label">Engagement Score</div>
+        <div class="metric-value" id="engagement">0</div>
+      </div>
+      <div class="metric-card m-violet">
+        <div class="metric-icon">🧩</div>
+        <div class="metric-label">Learning Style</div>
+        <div class="metric-value" id="learningStyle" style="font-size:18px;">N/A</div>
+      </div>
+      <div class="metric-card m-teal">
+        <div class="metric-icon">💡</div>
+        <div class="metric-label">Smart Recommendations</div>
+        <div class="metric-value" id="recommendations" style="font-size:16px;">-</div>
+      </div>
+      <div class="metric-card m-orange">
+        <div class="metric-icon">📈</div>
+        <div class="metric-label">Performance Forecast</div>
+        <div class="metric-value" id="forecast" style="font-size:18px;">-</div>
+      </div>
+      <div class="metric-card m-rose">
+        <div class="metric-icon">💬</div>
+        <div class="metric-label">Feedback Sentiment</div>
+        <div class="metric-value" id="sentiment" style="font-size:18px;">-</div>
+      </div>
+      <div class="metric-card m-amber">
+        <div class="metric-icon">🔔</div>
+        <div class="metric-label">Activity Drop Alerts</div>
+        <div class="metric-value" id="alerts" style="font-size:18px;">-</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC_2TxTMSQLB7prweEil2frOziR8Pfc58I",
+      authDomain: "chatapp-1df97.firebaseapp.com",
+      projectId: "chatapp-1df97",
+      storageBucket: "chatapp-1df97.appspot.com",
+      messagingSenderId: "498191405509",
+      appId: "1:498191405509:web:c48ef3a1c599a02a1d3bac"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const docRef = db.collection("students").doc(user.uid);
+        docRef.onSnapshot(doc => {
+          if (doc.exists) {
+            const d = doc.data();
+            document.getElementById("username").textContent = d.username || "-";
+            document.getElementById("classesAttended").textContent = d.classesAttended || 0;
+            document.getElementById("videosWatched").textContent = d.videosWatched || 0;
+            document.getElementById("watchTime").textContent = `${d.totalWatchTime || 0} mins`;
+            document.getElementById("timeSpent").textContent = `${d.timeSpent || 0} mins`;
+            document.getElementById("polls").textContent = d.pollsParticipated || 0;
+            document.getElementById("pollPerformance").textContent = `${d.pollPerformance || 0}%`;
+            document.getElementById("engagement").textContent = d.engagementScore || 0;
+            document.getElementById("learningStyle").textContent = d.learningStyle || "N/A";
+            document.getElementById("recommendations").textContent = d.smartRecommendations || "-";
+            document.getElementById("forecast").textContent = d.performanceForecast || "-";
+            document.getElementById("sentiment").textContent = d.feedbackSentiment || "-";
+            document.getElementById("alerts").textContent = d.activityDropAlerts || "-";
+          } else {
+            const defaultData = {
+              username: user.displayName || user.email || "Student",
+              classesAttended: 0, videosWatched: 0, totalWatchTime: 0, timeSpent: 0,
+              pollsParticipated: 0, pollPerformance: 0, engagementScore: 0,
+              learningStyle: "N/A", smartRecommendations: "-", performanceForecast: "-",
+              feedbackSentiment: "-", activityDropAlerts: "-"
+            };
+            docRef.set(defaultData);
+          }
+        });
+      } else {
+        alert("You are not logged in. Redirecting...");
+        window.location.href = "login.html";
+      }
+    });
+
+    function logout() {
+      auth.signOut().then(() => window.location.href = "login.html");
+    }
+  </script>
+</body>
+
+</html>

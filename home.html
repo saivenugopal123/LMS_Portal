@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home – Aditya University LMS</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    /* Card grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 26px;
+      padding-bottom: 50px;
+    }
+
+    .feature-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px rgba(79, 70, 229, 0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.28s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px rgba(79, 70, 229, 0.18);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 210px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 20px 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-icon {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    /* Colored top bar per card */
+    .bar-indigo {
+      border-top: 4px solid #4F46E5;
+    }
+
+    .bar-orange {
+      border-top: 4px solid #F97316;
+    }
+
+    .bar-violet {
+      border-top: 4px solid #7C3AED;
+    }
+
+    .bar-teal {
+      border-top: 4px solid #0D9488;
+    }
+
+    .bar-rose {
+      border-top: 4px solid #E11D48;
+    }
+
+    .bar-amber {
+      border-top: 4px solid #D97706;
+    }
+
+    .more-info-toggle {
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 10px 0;
+      width: fit-content;
+      user-select: none;
+    }
+
+    .more-info-toggle:hover {
+      opacity: 0.8;
+    }
+
+    .description {
+      display: none;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .card-footer {
+      margin-top: auto;
+      padding-top: 12px;
+    }
+
+    /* Modal */
+    #subjectModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 27, 75, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #subjectModal.open {
+      display: flex;
+    }
+
+    #subjectModal .modal-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 30px 28px;
+      width: 340px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+
+    #subjectModal h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    #subjectModal select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="lms-header">
+    <div class="lms-logo-title">
+      <img src="images/aditya_university.png" alt="Aditya University Logo" class="lms-logo" />
+      <div class="lms-title">Aditya University</div>
+    </div>
+    <nav class="lms-nav">
+      <a href="home.html">Home</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="dashboard.html">Dashboard</a>
+    </nav>
+    <button class="lms-action-btn" onclick="logout()">Logout</button>
+  </header>
+
+  <div class="lms-container">
+    <h2 class="lms-section-title">LMS Portal</h2>
+
+    <div class="feature-grid">
+
+      <!-- Chatroom -->
+      <div class="feature-card bar-indigo">
+        <img src="images/chatroom.png" alt="Chatroom" class="card-img" />
+        <div class="card-body">
+          <div class="card-icon">💬</div>
+          <div class="card-title">Real-time Chatroom</div>
+          <div class="more-info-toggle" onclick="toggleDesc(this)">More Info <span>▼</span></div>
+          <div class="description">Interact instantly with peers and faculty. Ask questions, share ideas, and get
+            real-time responses during class sessions without interrupting the flow.</div>
+          <div class="card-footer">
+            <button class="lms-btn" onclick="window.location.href='chatroom/public/index.html'">Go to Chatroom</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- E-Learning -->
+      <div class="feature-card bar-orange">
+        <img src="images/e-learning.png" alt="E-Learning" class="card-img" />
+        <div class="card-body">
+          <div class="card-icon">🎓</div>
+          <div class="card-title">E-Learning</div>
+          <div class="more-info-toggle" onclick="toggleDesc(this)">More Info <span>▼</span></div>
+          <div class="description">Access curated video lectures and learning materials for all MBA subjects. Filter by
+            subject or faculty and learn at your own pace, anytime.</div>
+          <div class="card-footer">
+            <button class="lms-btn accent" onclick="window.location.href='elearning.html'">Go to E-Learning</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- E-Reference -->
+      <div class="feature-card bar-violet">
+        <img src="images/ereference.png" alt="E-Reference" class="card-img" />
+        <div class="card-body">
+          <div class="card-icon">📚</div>
+          <div class="card-title">E-Reference</div>
+          <div class="more-info-toggle" onclick="toggleDesc(this)">More Info <span>▼</span></div>
+          <div class="description">Browse and download digital reference materials, notes, and recommended readings for
+            each subject to support your coursework and research.</div>
+          <div class="card-footer">
+            <button class="lms-btn" onclick="window.location.href='ereference.html'"
+              style="background:linear-gradient(135deg,#7C3AED,#4F46E5)">Go to E-Reference</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Master -->
+      <div class="feature-card bar-teal">
+        <img src="images/quizmaster.png" alt="Quiz Master" class="card-img" />
+        <div class="card-body">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">Quiz Master</div>
+          <div class="more-info-toggle" onclick="toggleDesc(this)">More Info <span>▼</span></div>
+          <div class="description">Participate in live quizzes and polls during class. Test your understanding, get
+            instant feedback, and unlock the next unit by passing each quiz.</div>
+          <div class="card-footer">
+            <button class="lms-btn" onclick="window.location.href='quizmaster.html'"
+              style="background:linear-gradient(135deg,#0D9488,#0284C7)">Go to Quiz Master</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assignment Portal -->
+      <div class="feature-card bar-rose">
+        <img src="images/assignment-portal.png" alt="Assignment Portal" class="card-img" />
+        <div class="card-body">
+          <div class="card-icon">📝</div>
+          <div class="card-title">Assignment Portal</div>
+          <div class="more-info-toggle" onclick="toggleDesc(this)">More Info <span>▼</span></div>
+          <div class="description">Upload your assignments by subject, view your submissions, and let teachers review
+            and manage all student assignments in one place.</div>
+          <div class="card-footer">
+            <button class="lms-btn" onclick="window.location.href='assignment-portal.html'"
+              style="background:linear-gradient(135deg,#E11D48,#F97316)">Go to Assignments</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Classroom Scheduler -->
+      <div class="feature-card bar-amber">
+        <img src="images/classroom-scheduler.png" alt="Classroom Scheduler" class="card-img" />
+        <div class="card-body">
+          <div class="card-icon">📅</div>
+          <div class="card-title">Classroom Scheduler</div>
+          <div class="more-info-toggle" onclick="toggleDesc(this)">More Info <span>▼</span></div>
+          <div class="description">Upload and view your personalized class timetable. Teachers and students can manage
+            and access schedules for all classroom activities.</div>
+          <div class="card-footer">
+            <button class="lms-btn" onclick="window.location.href='classroom-scheduler.html'"
+              style="background:linear-gradient(135deg,#D97706,#F97316)">Go to Scheduler</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Subject Modal -->
+  <div id="subjectModal">
+    <div class="modal-box">
+      <h3>📖 Select Your Subject</h3>
+      <select id="subjectSelect">
+        <option value="">-- Choose a subject --</option>
+        <option value="Management">Management</option>
+        <option value="Marketing">Marketing</option>
+        <option value="Finance">Finance</option>
+      </select>
+      <div class="modal-btns">
+        <button class="lms-btn" id="confirmSubject">Confirm</button>
+        <button class="lms-btn ghost"
+          onclick="document.getElementById('subjectModal').classList.remove('open')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleDesc(el) {
+      const desc = el.nextElementSibling;
+      const arrow = el.querySelector('span');
+      desc.style.display = desc.style.display === 'block' ? 'none' : 'block';
+      arrow.textContent = desc.style.display === 'block' ? '▲' : '▼';
+    }
+    function logout() { window.location.href = "login.html"; }
+  </script>
+</body>
+
+</html>

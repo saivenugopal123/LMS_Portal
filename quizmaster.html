@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Master – Aditya University LMS</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    body {
+      padding-top: 64px;
+    }
+
+    .quiz-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 24px;
+      display: flex;
+      gap: 28px;
+    }
+
+    /* Sidebar */
+    .quiz-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      background: linear-gradient(180deg, var(--primary-dark), var(--primary));
+      border-radius: 18px;
+      padding: 22px 0 18px;
+      box-shadow: var(--shadow-md);
+      align-self: flex-start;
+      position: sticky;
+      top: 84px;
+    }
+
+    .quiz-sidebar h2 {
+      text-align: center;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding: 0 16px;
+    }
+
+    .quiz-sidebar button {
+      display: block;
+      width: calc(100% - 24px);
+      margin: 6px 12px;
+      padding: 11px 0;
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.85);
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-sidebar button.active,
+    .quiz-sidebar button:hover {
+      background: var(--accent);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+    }
+
+    /* Main */
+    .quiz-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Unit cards */
+    .unit-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .unit-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--border);
+      padding: 28px 14px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .unit-card:not(.locked):hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      background: #F0EFFF;
+      border-color: var(--primary);
+    }
+
+    .unit-card.locked {
+      background: #f3f4f6;
+      color: #9ca3af;
+      cursor: not-allowed;
+      border-style: dashed;
+      opacity: 0.75;
+    }
+
+    .unit-card.passed {
+      border-color: #10B981;
+      background: #ECFDF5;
+      color: #065F46;
+    }
+
+    .lock-icon {
+      font-size: 22px;
+      display: block;
+      margin-top: 8px;
+    }
+
+    /* Quiz section */
+    .quiz-section {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      padding: 28px 26px;
+      margin-bottom: 24px;
+    }
+
+    .quiz-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 22px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    /* Progress bar */
+    .quiz-progress {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--violet));
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+
+    .quiz-question {
+      margin-bottom: 22px;
+      padding: 18px 20px;
+      background: #F8F7FF;
+      border-radius: 12px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .quiz-question b {
+      color: var(--primary);
+    }
+
+    .quiz-question>div:first-child {
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .quiz-options label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text);
+      transition: background 0.15s;
+      margin-bottom: 6px;
+    }
+
+    .quiz-options label:hover {
+      background: #EEF2FF;
+    }
+
+    .quiz-options input[type="radio"] {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+    }
+
+    .quiz-submit-btn {
+      margin-top: 16px;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, var(--primary), var(--violet));
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(79, 70, 229, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .quiz-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
+    }
+
+    .quiz-result {
+      margin-top: 20px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      background: #F0EFFF;
+      border: 1.5px solid var(--border);
+    }
+
+    /* Teacher results table */
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .results-table th {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .results-table th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    .results-table th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    .results-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .results-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .results-table tr:hover td {
+      background: #F8F7FF;
+    }
+
+    @media (max-width: 900px) {
+      .quiz-layout {
+        flex-direction: column;
+      }
+
+      .quiz-sidebar {
+        width: 100%;
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="lms-sub-header">
+    <a class="back-btn" href="home.html">← Back</a>
+    🧠 Quiz Master
+  </div>
+
+  <div class="quiz-layout">
+    <div class="quiz-sidebar" id="sidebar"><!-- JS rendered --></div>
+    <div class="quiz-main">
+      <div class="unit-cards" id="unit-cards"></div>
+      <div id="quiz-section"></div>
+    </div>
+  </div>
+
+  <script>
+    const QUESTIONS = {
+      management: [
+        [
+          { question: "Which function is NOT a part of management?", options: ["Planning", "Organizing", "Auditing", "Controlling"], answer: "Auditing" },
+          { question: "Who is known as the father of scientific management?", options: ["Henry Fayol", "Elton Mayo", "F.W. Taylor", "Peter Drucker"], answer: "F.W. Taylor" },
+          { question: "Span of control refers to:", options: ["Number of subordinates a manager supervises", "Number of departments", "Levels of management", "Number of products"], answer: "Number of subordinates a manager supervises" },
+          { question: "Which is a quantitative technique in management?", options: ["SWOT analysis", "Linear programming", "Brainstorming", "Leadership training"], answer: "Linear programming" },
+          { question: "Maslow's hierarchy of needs does NOT include:", options: ["Physiological", "Safety", "Esteem", "Profit"], answer: "Profit" }
+        ],
+        [
+          { question: "Which is a type of organizational structure?", options: ["Matrix", "Circular", "Random", "Flat"], answer: "Matrix" },
+          { question: "Delegation means:", options: ["Transferring authority", "Transferring responsibility", "Transferring accountability", "Transferring ownership"], answer: "Transferring authority" },
+          { question: "Which is NOT a leadership style?", options: ["Autocratic", "Democratic", "Laissez-faire", "Bureaucratic"], answer: "Bureaucratic" },
+          { question: "The process of comparing actual performance with standards is called:", options: ["Planning", "Controlling", "Staffing", "Motivating"], answer: "Controlling" },
+          { question: "Which is NOT a step in decision making?", options: ["Identifying alternatives", "Evaluating alternatives", "Implementing the decision", "Ignoring feedback"], answer: "Ignoring feedback" }
+        ],
+        [
+          { question: "Which is NOT a function of HRM?", options: ["Recruitment", "Selection", "Production", "Training"], answer: "Production" },
+          { question: "Job analysis results in:", options: ["Job description", "Job evaluation", "Job rotation", "Job enrichment"], answer: "Job description" },
+          { question: "Which is a source of recruitment?", options: ["Internal", "External", "Both", "None"], answer: "Both" },
+          { question: "Performance appraisal is used to:", options: ["Increase salary only", "Evaluate employee performance", "Fire employees", "Reduce workload"], answer: "Evaluate employee performance" },
+          { question: "Which is NOT a type of training?", options: ["On-the-job", "Off-the-job", "Vestibule", "Profit-sharing"], answer: "Profit-sharing" }
+        ],
+        [
+          { question: "Which is NOT a marketing mix element?", options: ["Product", "Price", "Place", "Profit"], answer: "Profit" },
+          { question: "Market segmentation is based on:", options: ["Demographics", "Geography", "Psychographics", "All of these"], answer: "All of these" },
+          { question: "Which is NOT a pricing strategy?", options: ["Penetration", "Skimming", "Cost-plus", "Delegation"], answer: "Delegation" },
+          { question: "Brand equity refers to:", options: ["Value of a brand", "Brand logo", "Brand color", "Brand slogan"], answer: "Value of a brand" },
+          { question: "Which is NOT a type of promotion?", options: ["Advertising", "Personal selling", "Publicity", "Auditing"], answer: "Auditing" }
+        ],
+        [
+          { question: "Which is NOT a financial statement?", options: ["Balance Sheet", "Income Statement", "Cash Flow Statement", "Audit Report"], answer: "Audit Report" },
+          { question: "Working capital means:", options: ["Current assets - current liabilities", "Fixed assets", "Total assets", "Total liabilities"], answer: "Current assets - current liabilities" },
+          { question: "Which is NOT a source of finance?", options: ["Equity", "Debentures", "Retained earnings", "Inventory"], answer: "Inventory" },
+          { question: "Capital budgeting is related to:", options: ["Long-term investments", "Short-term loans", "Inventory management", "Sales promotion"], answer: "Long-term investments" },
+          { question: "Dividend is paid to:", options: ["Creditors", "Debenture holders", "Shareholders", "Employees"], answer: "Shareholders" }
+        ]
+      ],
+      marketing: [
+        [
+          { question: "Which is NOT a component of the marketing mix?", options: ["Product", "Price", "Place", "Planning"], answer: "Planning" },
+          { question: "Market segmentation divides the market based on:", options: ["Needs", "Wants", "Characteristics", "All of these"], answer: "All of these" },
+          { question: "Which is NOT a type of market?", options: ["Consumer", "Industrial", "Reseller", "Profit"], answer: "Profit" },
+          { question: "Brand loyalty means:", options: ["Switching brands", "Preferring one brand", "Buying all brands", "Ignoring brands"], answer: "Preferring one brand" },
+          { question: "Which is NOT a sales promotion tool?", options: ["Coupons", "Discounts", "Advertising", "Auditing"], answer: "Auditing" }
+        ],
+        [
+          { question: "Which is NOT a stage in product life cycle?", options: ["Introduction", "Growth", "Decline", "Profit"], answer: "Profit" },
+          { question: "Which is NOT a pricing method?", options: ["Cost-plus", "Penetration", "Skimming", "Delegation"], answer: "Delegation" },
+          { question: "Which is NOT a channel of distribution?", options: ["Wholesaler", "Retailer", "Consumer", "Auditor"], answer: "Auditor" },
+          { question: "Which is NOT a type of advertising?", options: ["Television", "Radio", "Newspaper", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a function of packaging?", options: ["Protection", "Promotion", "Convenience", "Auditing"], answer: "Auditing" }
+        ],
+        [
+          { question: "Which is NOT a type of market research?", options: ["Primary", "Secondary", "Tertiary", "Qualitative"], answer: "Tertiary" },
+          { question: "Which is NOT a method of sales forecasting?", options: ["Trend analysis", "Regression", "Guesswork", "Market test"], answer: "Guesswork" },
+          { question: "Which is NOT a type of consumer?", options: ["Innovator", "Early adopter", "Late majority", "Auditor"], answer: "Auditor" },
+          { question: "Which is NOT a type of product?", options: ["Convenience", "Shopping", "Specialty", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a function of marketing?", options: ["Buying", "Selling", "Storing", "Auditing"], answer: "Auditing" }
+        ],
+        [
+          { question: "Which is NOT a type of pricing?", options: ["Cost-plus", "Penetration", "Skimming", "Delegation"], answer: "Delegation" },
+          { question: "Which is NOT a type of promotion?", options: ["Advertising", "Personal selling", "Publicity", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of distribution?", options: ["Direct", "Indirect", "Selective", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a function of sales management?", options: ["Recruitment", "Training", "Motivation", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of market segmentation?", options: ["Demographic", "Geographic", "Psychographic", "Auditing"], answer: "Auditing" }
+        ],
+        [
+          { question: "Which is NOT a type of consumer behavior?", options: ["Complex", "Dissonance-reducing", "Habitual", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a factor influencing consumer behavior?", options: ["Cultural", "Social", "Personal", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of buying decision?", options: ["Routine", "Limited", "Extensive", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a stage in the buying process?", options: ["Need recognition", "Information search", "Evaluation", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of business market?", options: ["Producer", "Reseller", "Government", "Auditing"], answer: "Auditing" }
+        ]
+      ],
+      finance: [
+        [
+          { question: "Which is NOT a financial statement?", options: ["Balance Sheet", "Income Statement", "Cash Flow Statement", "Audit Report"], answer: "Audit Report" },
+          { question: "Working capital means:", options: ["Current assets - current liabilities", "Fixed assets", "Total assets", "Total liabilities"], answer: "Current assets - current liabilities" },
+          { question: "Which is NOT a source of finance?", options: ["Equity", "Debentures", "Retained earnings", "Inventory"], answer: "Inventory" },
+          { question: "Capital budgeting is related to:", options: ["Long-term investments", "Short-term loans", "Inventory management", "Sales promotion"], answer: "Long-term investments" },
+          { question: "Dividend is paid to:", options: ["Creditors", "Debenture holders", "Shareholders", "Employees"], answer: "Shareholders" }
+        ],
+        [
+          { question: "Which is NOT a type of ratio?", options: ["Liquidity", "Profitability", "Solvency", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a method of capital budgeting?", options: ["Payback period", "Net present value", "Internal rate of return", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of working capital?", options: ["Permanent", "Temporary", "Seasonal", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a source of short-term finance?", options: ["Trade credit", "Bank loan", "Debentures", "Auditing"], answer: "Debentures" },
+          { question: "Which is NOT a function of financial management?", options: ["Investment", "Financing", "Dividend", "Auditing"], answer: "Auditing" }
+        ],
+        [
+          { question: "Which is NOT a type of budget?", options: ["Sales", "Production", "Cash", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a method of financial analysis?", options: ["Ratio analysis", "Trend analysis", "Common size analysis", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of investment?", options: ["Equity", "Debt", "Real estate", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of dividend?", options: ["Cash", "Stock", "Bond", "Auditing"], answer: "Bond" },
+          { question: "Which is NOT a type of share?", options: ["Equity", "Preference", "Debenture", "Auditing"], answer: "Debenture" }
+        ],
+        [
+          { question: "Which is NOT a function of a bank?", options: ["Accepting deposits", "Granting loans", "Auditing", "Remittance"], answer: "Auditing" },
+          { question: "Which is NOT a negotiable instrument?", options: ["Cheque", "Bill of exchange", "Promissory note", "Audit report"], answer: "Audit report" },
+          { question: "Which is NOT a type of account?", options: ["Savings", "Current", "Fixed", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of loan?", options: ["Personal", "Home", "Car", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of bank?", options: ["Commercial", "Cooperative", "Central", "Auditing"], answer: "Auditing" }
+        ],
+        [
+          { question: "Which is NOT a type of insurance?", options: ["Life", "Health", "Car", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a principle of insurance?", options: ["Utmost good faith", "Insurable interest", "Indemnity", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of premium?", options: ["Single", "Level", "Flexible", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of claim?", options: ["Maturity", "Death", "Surrender", "Auditing"], answer: "Auditing" },
+          { question: "Which is NOT a type of policy?", options: ["Endowment", "Money back", "Term", "Auditing"], answer: "Auditing" }
+        ]
+      ]
+    };
+
+    const SUBJECTS = [
+      { key: "management", label: "💼 Management" },
+      { key: "marketing", label: "📣 Marketing" },
+      { key: "finance", label: "💰 Finance" }
+    ];
+
+    let username = localStorage.getItem("chat_username") || "guest";
+    let selectedSubject = null;
+    let eligibility = [true, false, false, false, false];
+    let passedUnits = [false, false, false, false, false];
+
+    const USER_ROLE = localStorage.getItem("chat_role") || "student";
+    const TEACHER_SUBJECT = (localStorage.getItem("teacher_subject") || "").toLowerCase();
+
+    function saveQuizResult(subject, unitIndex, score, total, percent, passed) {
+      let results = JSON.parse(localStorage.getItem("quiz_results") || "{}");
+      if (!results[subject]) results[subject] = {};
+      if (!results[subject][username]) results[subject][username] = [];
+      results[subject][username][unitIndex] = { score, total, percent, passed, date: new Date().toLocaleString() };
+      localStorage.setItem("quiz_results", JSON.stringify(results));
+    }
+
+    function getQuizResultsForTeacher(subject) {
+      let results = JSON.parse(localStorage.getItem("quiz_results") || "{}");
+      return results[subject] || {};
+    }
+
+    function loadEligibility(subject) {
+      const data = localStorage.getItem("poll_elig_" + username + "_" + subject);
+      const passed = localStorage.getItem("poll_passed_" + username + "_" + subject);
+      eligibility = data ? JSON.parse(data) : [true, false, false, false, false];
+      passedUnits = passed ? JSON.parse(passed) : [false, false, false, false, false];
+    }
+    function saveEligibility(subject) {
+      localStorage.setItem("poll_elig_" + username + "_" + subject, JSON.stringify(eligibility));
+      localStorage.setItem("poll_passed_" + username + "_" + subject, JSON.stringify(passedUnits));
+    }
+
+    function renderUnitCards() {
+      const unitCards = document.getElementById("unit-cards");
+      unitCards.innerHTML = "";
+      if (!selectedSubject) return;
+      for (let i = 0; i < 5; i++) {
+        const card = document.createElement("div");
+        card.className = "unit-card";
+        let inner = `Unit ${i + 1}`;
+        if (!eligibility[i]) {
+          card.classList.add("locked");
+          inner += `<span class="lock-icon">🔒</span>`;
+        }
+        if (passedUnits[i]) {
+          card.classList.add("passed");
+          inner += `<div style="color:#10B981;font-size:13px;margin-top:6px;">✓ Passed</div>`;
+        }
+        card.innerHTML = inner;
+        card.addEventListener("click", () => { if (eligibility[i] && USER_ROLE === "student") renderQuiz(i); });
+        unitCards.appendChild(card);
+      }
+    }
+
+    function renderQuiz(unitIndex) {
+      if (USER_ROLE === "teacher") return;
+      const quizSection = document.getElementById("quiz-section");
+      const questions = QUESTIONS[selectedSubject][unitIndex];
+      const pct = Math.round(((unitIndex) / 5) * 100);
+      let html = `<div class="quiz-section">
+    <h2>🧠 ${capitalize(selectedSubject)} – Unit ${unitIndex + 1} Quiz</h2>
+    <div class="quiz-progress"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>
+    <form id="quiz-form">`;
+      questions.forEach((q, idx) => {
+        html += `<div class="quiz-question">
+      <div><b>Q${idx + 1}:</b> ${q.question}</div>
+      <div class="quiz-options">`;
+        q.options.forEach(opt => {
+          html += `<label><input type="radio" name="q${idx}" value="${opt}" required> ${opt}</label>`;
+        });
+        html += `</div></div>`;
+      });
+      html += `<button type="submit" class="quiz-submit-btn">Submit Quiz</button></form>
+    <div class="quiz-result" id="quiz-result" style="display:none;"></div></div>`;
+      quizSection.innerHTML = html;
+
+      document.getElementById("quiz-form").onsubmit = function (e) {
+        e.preventDefault();
+        let correct = 0;
+        questions.forEach((q, idx) => {
+          const ans = (quizSection.querySelector(`input[name="q${idx}"]:checked`) || {}).value;
+          if (ans === q.answer) correct++;
+        });
+        const percent = (correct / questions.length) * 100;
+        const resultEl = document.getElementById("quiz-result");
+        resultEl.style.display = "block";
+        if (percent >= 75) {
+          resultEl.style.background = "#ECFDF5";
+          resultEl.style.borderColor = "#10B981";
+          resultEl.innerHTML = `✅ You scored <b>${correct}/${questions.length}</b> (${percent.toFixed(1)}%) – <span style="color:#065F46;">Congratulations! You passed this unit.</span>`;
+          passedUnits[unitIndex] = true;
+          if (unitIndex < 4) eligibility[unitIndex + 1] = true;
+          saveEligibility(selectedSubject);
+          renderUnitCards();
+        } else {
+          resultEl.style.background = "#FFF1F2";
+          resultEl.style.borderColor = "#E11D48";
+          resultEl.innerHTML = `❌ You scored <b>${correct}/${questions.length}</b> (${percent.toFixed(1)}%) – <span style="color:#9F1239;">You did not pass. Try again!</span>`;
+        }
+        saveQuizResult(selectedSubject, unitIndex, correct, questions.length, percent, percent >= 75);
+      };
+    }
+
+    function renderTeacherResults(unitIndex = null) {
+      if (USER_ROLE !== "teacher" || !TEACHER_SUBJECT) return;
+      const mainContent = document.querySelector(".quiz-main");
+      const results = getQuizResultsForTeacher(TEACHER_SUBJECT);
+      let html = `<div class="quiz-section"><h2>📊 ${capitalize(TEACHER_SUBJECT)} – Student Results</h2>`;
+      if (!Object.keys(results).length) {
+        html += "<p style='color:var(--text-muted)'>No quiz results yet for your subject.</p></div>";
+        mainContent.innerHTML = html;
+        return;
+      }
+      html += `<div style="overflow-x:auto;"><table class="results-table">
+    <tr><th>Student</th><th>Unit</th><th>Score</th><th>Percent</th><th>Passed</th><th>Date</th></tr>`;
+      Object.entries(results).forEach(([student, units]) => {
+        units.forEach((res, idx) => {
+          if (!res) return;
+          if (unitIndex !== null && unitIndex !== idx) return;
+          html += `<tr>
+        <td>${student}</td><td>Unit ${idx + 1}</td>
+        <td>${res.score}/${res.total}</td>
+        <td>${res.percent.toFixed(1)}%</td>
+        <td>${res.passed ? "✅ Yes" : "❌ No"}</td>
+        <td>${res.date}</td></tr>`;
+        });
+      });
+      html += "</table></div></div>";
+      mainContent.innerHTML = html;
+    }
+
+    function capitalize(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ""; }
+
+    function renderSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      if (USER_ROLE === "teacher" && TEACHER_SUBJECT) {
+        let html = "<h2>Filter by Unit</h2>";
+        for (let i = 0; i < 5; i++) html += `<button class="unit-filter-btn" data-unit="${i}">Unit ${i + 1}</button>`;
+        sidebar.innerHTML = html;
+      } else {
+        let html = "<h2>Subject</h2>";
+        html += SUBJECTS.map(s => `<button class="subject-btn" data-subject="${s.key}">${s.label}</button>`).join('');
+        sidebar.innerHTML = html;
+      }
+    }
+
+    function attachSidebarListeners() {
+      if (USER_ROLE === "teacher" && TEACHER_SUBJECT) {
+        document.querySelectorAll('.unit-filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.unit-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderTeacherResults(parseInt(btn.dataset.unit));
+            document.getElementById("unit-cards").innerHTML = "";
+          });
+        });
+      } else {
+        document.querySelectorAll('.subject-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedSubject = btn.dataset.subject;
+            loadEligibility(selectedSubject);
+            document.getElementById("quiz-section").innerHTML = "";
+            renderUnitCards();
+          });
+        });
+      }
+    }
+
+    renderSidebar();
+    attachSidebarListeners();
+    if (USER_ROLE === "teacher" && TEACHER_SUBJECT) {
+      renderTeacherResults();
+      document.getElementById("unit-cards").innerHTML = "";
+    } else {
+      renderUnitCards();
+    }
+  </script>
+</body>
+
+</html>

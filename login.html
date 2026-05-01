@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login – Aditya University LMS</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    html, body {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #312E81 0%, #4F46E5 45%, #7C3AED 80%, #C026D3 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated floating blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.25;
+      animation: float 8s ease-in-out infinite;
+    }
+    body::before {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, #F97316, transparent);
+      top: -80px; left: -80px;
+    }
+    body::after {
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, #818CF8, transparent);
+      bottom: -80px; right: -80px;
+      animation-delay: -4s;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(30px) scale(1.06); }
+    }
+
+    /* Glass card */
+    .login-card {
+      position: relative;
+      z-index: 10;
+      width: 90%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+      text-align: center;
+      animation: slideUp 0.55s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Logo at top */
+    .login-logo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.5);
+      box-shadow: 0 0 0 8px rgba(255,255,255,0.1), 0 8px 24px rgba(0,0,0,0.25);
+      margin-bottom: 16px;
+    }
+
+    .login-card h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .login-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 26px;
+    }
+
+    /* Screen toggle */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* Role toggle */
+    .role-switch {
+      display: flex;
+      background: rgba(255,255,255,0.12);
+      border-radius: 30px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 22px;
+    }
+    .role-switch label {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 26px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      transition: all 0.25s;
+      user-select: none;
+    }
+    .role-switch input[type="radio"] { display: none; }
+    .role-switch input[type="radio"]:checked + label {
+      background: #fff;
+      color: #4F46E5;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Input fields */
+    .field {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .field input::placeholder { color: rgba(255,255,255,0.45); }
+    .field input:focus {
+      border-color: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.22);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+    }
+
+    /* Submit button */
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      background: #fff;
+      color: #4F46E5;
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    /* Switch link */
+    .switch-link {
+      margin-top: 18px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+    .switch-link a {
+      color: #fff;
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1.5px solid rgba(255,255,255,0.4);
+      transition: border-color 0.2s;
+    }
+    .switch-link a:hover { border-color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <img src="images/aditya_university.png" alt="Logo" class="login-logo" />
+    <h2>Aditya University</h2>
+    <p class="login-subtitle">Learning Management System</p>
+
+    <!-- Login Screen -->
+    <div class="screen login-screen active">
+      <div class="role-switch">
+        <input type="radio" id="role-teacher" name="user-role" value="teacher" checked />
+        <label for="role-teacher">Teacher</label>
+        <input type="radio" id="role-student" name="user-role" value="student" />
+        <label for="role-student">Student</label>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="you@aditya.edu.in" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" />
+      </div>
+      <button class="login-btn" id="login-btn">Sign In →</button>
+      <p class="switch-link">Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+    </div>
+
+    <!-- Signup Screen -->
+    <div class="screen signup-screen">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="signup-username" placeholder="Your name" />
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="signup-email" placeholder="you@aditya.edu.in" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="signup-password" placeholder="Create a password" />
+      </div>
+      <button class="login-btn" id="signup-btn">Create Account →</button>
+      <p class="switch-link">Already have an account? <a href="#" id="show-login">Sign In</a></p>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC_2TxTMSQLB7prweEil2frOziR8Pfc58I",
+      authDomain: "chatapp-1df97.firebaseapp.com",
+      projectId: "chatapp-1df97",
+      storageBucket: "chatapp-1df97.appspot.com",
+      messagingSenderId: "498191405509",
+      appId: "1:498191405509:web:c48ef3a1c599a02a1d3bac",
+      measurementId: "G-Y0VN62FG0N"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginScreen  = document.querySelector(".login-screen");
+      const signupScreen = document.querySelector(".signup-screen");
+      const showSignup   = document.getElementById("show-signup");
+      const showLogin    = document.getElementById("show-login");
+      const teacherRadio = document.getElementById("role-teacher");
+      const studentRadio = document.getElementById("role-student");
+
+      function toggleSignupLink() {
+        showSignup.style.display = teacherRadio.checked ? "none" : "inline";
+      }
+      teacherRadio.addEventListener("change", toggleSignupLink);
+      studentRadio.addEventListener("change", toggleSignupLink);
+      toggleSignupLink();
+
+      showSignup.addEventListener("click", e => {
+        e.preventDefault();
+        loginScreen.classList.remove("active");
+        signupScreen.classList.add("active");
+      });
+      showLogin.addEventListener("click", e => {
+        e.preventDefault();
+        signupScreen.classList.remove("active");
+        loginScreen.classList.add("active");
+      });
+
+      document.getElementById("signup-btn").addEventListener("click", () => {
+        const username = document.getElementById("signup-username").value.trim();
+        const email    = document.getElementById("signup-email").value.trim();
+        const password = document.getElementById("signup-password").value.trim();
+        const role = "student";
+        if (!username || !email || !password) { alert("Please fill in all fields!"); return; }
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(cred => {
+            const uid = cred.user.uid;
+            return Promise.all([
+              db.collection("users").doc(uid).set({ username, role }),
+              db.collection("students").doc(uid).set({
+                username, classesAttended:0, videosWatched:0, totalWatchTime:0,
+                timeSpent:0, pollsParticipated:0, pollPerformance:0, engagementScore:0,
+                learningStyle:"N/A", smartRecommendations:"-", performanceForecast:"-",
+                feedbackSentiment:"-", activityDropAlerts:"-"
+              })
+            ]);
+          })
+          .then(() => {
+            localStorage.setItem("chat_username", document.getElementById("signup-username").value.trim());
+            localStorage.setItem("chat_role", role);
+            window.location.href = "home.html";
+          })
+          .catch(err => alert(err.message));
+      });
+
+      document.getElementById("login-btn").addEventListener("click", () => {
+        const email    = document.getElementById("login-email").value.trim();
+        const password = document.getElementById("login-password").value.trim();
+        const role     = document.querySelector("input[name='user-role']:checked").value;
+        if (!email || !password) { alert("Please enter both email and password!"); return; }
+        auth.signInWithEmailAndPassword(email, password)
+          .then(cred => {
+            if (role === "teacher") {
+              const allowed = ["rikki@gmail.com","ntr@gmail.com","teacher3@gmail.com"];
+              if (!allowed.includes(cred.user.email)) {
+                auth.signOut();
+                throw new Error("Access denied: This email is not authorized as a teacher.");
+              }
+            }
+            return db.collection("users").doc(cred.user.uid).get();
+          })
+          .then(doc => {
+            if (!doc.exists) throw new Error("User data not found.");
+            const username = doc.data().username || "Guest";
+            localStorage.setItem("chat_username", username);
+            localStorage.setItem("chat_role", role);
+            if (role === "teacher") {
+              const subjectMap = { "rikki":"Management", "ntr":"Marketing", "teacher3":"Finance" };
+              localStorage.setItem("teacher_subject", subjectMap[username.toLowerCase()] || "Management");
+            } else {
+              localStorage.removeItem("teacher_subject");
+            }
+            window.location.href = "home.html";
+          })
+          .catch(err => alert(err.message));
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Us</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      color: #333;
+    }
+
+    header {
+      background: #003366;
+      color: rgb(255, 255, 255);
+      padding: 15px 30px 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .title {
+      font-size: 50px;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+      margin-top: 10px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: #ccc;
+    }
+
+    .contact-section {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-section h2 {
+      text-align: center;
+      color: #003366;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, textarea {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: vertical;
+    }
+
+    button {
+      background: #003366;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #002855;
+    }
+
+    .address-info {
+      margin-top: 40px;
+      color: #333;
+    }
+
+    .address-info h3 {
+      color: #003366;
+      margin-bottom: 10px;
+    }
+
+    .address-info p {
+      margin: 5px 0;
+    }
+
+    @media (max-width: 600px) {
+      .contact-section {
+        padding: 20px;
+      }
+    }
+    .login-button {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background: #fff;
+  color: #003366;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background: #ccc;
+}
+  </style>
+</head>
+<body>
+
+   <header>
+    <div class="logo-title">
+      <img src="images/aditya_university.png" alt="Aditya University Logo" class="logo" />
+      <div class="title">Aditya University</div>
+    </div>
+    <nav>
+      <a href="home.html">Home</a>
+      <a href="/aboutus.html">About Us</a>
+      <a href="contact.html">Contact</a>
+      <a href="dashboard.html">Dashboard</a>
+
+    </nav>
+        <button class="login-button" onclick="logout()">Logout</button>
+
+  </header>
+
+  <div class="contact-section">
+    <h2>Contact Us</h2>
+      <form action="/send-email" method="post">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+
+
+    </form>
+
+    <div class="address-info">
+      <h3>Address</h3>
+      <p>Aditya University, Surampalem</p>
+      <p>East Godavari, Andhra Pradesh - 533437</p>
+      <p>Email: info@aditya.ac.in</p>
+      <p>Phone: +91-12345-67890</p>
+    </div>
+  </div>
+
+</body>
+<script>
+      function logout() {
+            // Perform logout actions here, like clearing session storage or cookies
+            window.location.href = "login.html"; // Redirect to login page
+        }
+</script>
+</html>

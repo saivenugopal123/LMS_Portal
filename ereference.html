@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Reference – Aditya University LMS</title>
+  <link rel="stylesheet" href="theme.css" />
+  <style>
+    body {
+      display: flex;
+      padding-top: 64px;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 200px;
+      background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      height: calc(100vh - 64px);
+      z-index: 5;
+      box-shadow: 4px 0 20px rgba(79, 70, 229, 0.15);
+    }
+
+    .sidebar-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.75);
+      padding: 14px 20px;
+      text-align: left;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      position: relative;
+      width: 100%;
+    }
+
+    .sidebar-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-left-color: var(--accent);
+    }
+
+    .sidebar-btn.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border-left-color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 200px;
+      width: calc(100vw - 200px);
+      min-height: calc(100vh - 64px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 24px;
+      background: var(--bg);
+      box-sizing: border-box;
+    }
+
+    .welcome-img {
+      max-width: 780px;
+      width: 90%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .form-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .form-section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .form-section select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-section select:focus {
+      border-color: var(--primary);
+    }
+
+    .pdf-viewer-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 70vh;
+      min-height: 300px;
+      border: none;
+      display: none;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Animated section entrance */
+    .center-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 72px;
+      }
+
+      .sidebar-btn {
+        font-size: 10px;
+        padding: 12px 6px;
+        text-align: center;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+      }
+
+      .sidebar-btn.active,
+      .sidebar-btn:hover {
+        border-bottom-color: var(--accent);
+        border-left-color: transparent;
+      }
+
+      .main-content {
+        margin-left: 72px;
+        width: calc(100vw - 72px);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .sidebar {
+        width: 52px;
+      }
+
+      .sidebar-btn {
+        font-size: 9px;
+        padding: 10px 2px;
+      }
+
+      .main-content {
+        margin-left: 52px;
+        width: calc(100vw - 52px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="lms-sub-header">
+    <a class="back-btn" href="home.html">← Back</a>
+    📚 E-Reference Materials
+  </div>
+
+  <div class="sidebar">
+    <button class="sidebar-btn" id="btn-calendar" onclick="showSection('calendar')">📅 Academic Calendar</button>
+    <button class="sidebar-btn" id="btn-regulations" onclick="showSection('regulations')">📋 Regulations</button>
+    <button class="sidebar-btn" id="btn-curriculum" onclick="showSection('curriculum')">🗂️ Curriculum</button>
+    <button class="sidebar-btn" id="btn-modelpapers" onclick="showSection('modelpapers')">📝 Model Papers</button>
+    <button class="sidebar-btn" id="btn-previouspapers" onclick="showSection('previouspapers')">📂 Previous
+      Papers</button>
+  </div>
+
+  <div class="main-content">
+    <!-- Welcome -->
+    <div id="welcomeSection" class="center-content">
+      <img src="images/welcome_to_ereference.png" alt="Welcome to E-Reference" class="welcome-img" />
+    </div>
+
+    <!-- Academic Calendar -->
+    <div id="calendarSection" class="hidden center-content">
+      <div class="form-section">
+        <h2>📅 Academic Calendar</h2>
+        <select id="calendarSelect">
+          <option value="">Select calendar…</option>
+          <option value="academic_calendar_mba.pdf">MBA Academic Calendar</option>
+          <option value="academic_calendar_mba_int.pdf">MBA (Integrated) Academic Calendar</option>
+        </select>
+        <button class="lms-btn" onclick="showPDF('calendar')">View PDF</button>
+      </div>
+      <div class="pdf-viewer-container"><iframe id="calendarPDF" class="pdf-viewer"></iframe></div>
+    </div>
+
+    <!-- Regulations -->
+    <div id="regulationsSection" class="hidden center-content">
+      <div class="form-section">
+        <h2>📋 Regulations</h2>
+        <select id="regulationSelectReg">
+          <option value="">Select regulation…</option>
+          <option value="regulations_mba.pdf">MBA Regulations</option>
+          <option value="regulations_mba_int.pdf">MBA (Integrated) Regulations</option>
+        </select>
+        <button class="lms-btn" onclick="showPDF('regulations')">View PDF</button>
+      </div>
+      <div class="pdf-viewer-container"><iframe id="regulationsPDF" class="pdf-viewer"></iframe></div>
+    </div>
+
+    <!-- Curriculum -->
+    <div id="curriculumSection" class="hidden center-content">
+      <div class="form-section">
+        <h2>🗂️ Curriculum</h2>
+        <select id="curriculumSelect">
+          <option value="">Select curriculum…</option>
+          <option value="curriculum_mba.pdf">MBA Curriculum</option>
+          <option value="curriculum_mba_int.pdf">MBA (Integrated) Curriculum</option>
+        </select>
+        <button class="lms-btn" onclick="showPDF('curriculum')">View PDF</button>
+      </div>
+      <div class="pdf-viewer-container"><iframe id="curriculumPDF" class="pdf-viewer"></iframe></div>
+    </div>
+
+    <!-- Model Papers -->
+    <div id="modelpapersSection" class="hidden center-content">
+      <div class="form-section">
+        <h2>📝 Model Papers</h2>
+        <select id="modelPaperSelect">
+          <option value="">Select subject…</option>
+          <option value="BUSINESS RESEARCH METHODS.pdf">Business Research Methods</option>
+          <option value="FINANCIAL MANAGEMENT.pdf">Financial Management</option>
+          <option value="HUMAN RESOURCE MANAGEMENT.pdf">Human Resource Management</option>
+          <option value="MARKETING MANAGEMENT.pdf">Marketing Management</option>
+          <option value="ORGANIZATIONAL BEHAVIOR.pdf">Organizational Behavior</option>
+          <option value="PRODUCTION & OPERATIONS MANAGEMENT.pdf">Production &amp; Operations Management</option>
+        </select>
+        <button class="lms-btn" onclick="showPDF('modelpapers')">View PDF</button>
+      </div>
+      <div class="pdf-viewer-container"><iframe id="modelpapersPDF" class="pdf-viewer"></iframe></div>
+    </div>
+
+    <!-- Previous Papers -->
+    <div id="previouspapersSection" class="hidden center-content">
+      <div class="form-section">
+        <h2>📂 Previous Year Papers</h2>
+        <select id="prevPaperSelect">
+          <option value="">Select subject…</option>
+          <option value="BUSINESS RESEARCH METHODS.pdf">Business Research Methods</option>
+          <option value="FINANCIAL MANAGEMENT.pdf">Financial Management</option>
+          <option value="HUMAN RESOURCE MANAGEMENT.pdf">Human Resource Management</option>
+          <option value="MARKETING MANAGEMENT.pdf">Marketing Management</option>
+        </select>
+        <button class="lms-btn" onclick="showPDF('previouspapers')">View PDF</button>
+      </div>
+      <div class="pdf-viewer-container"><iframe id="previouspapersPDF" class="pdf-viewer"></iframe></div>
+    </div>
+  </div>
+
+  <script>
+    function showSection(section) {
+      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + section).classList.add('active');
+      ['welcome', 'calendar', 'regulations', 'curriculum', 'modelpapers', 'previouspapers'].forEach(s => {
+        const el = document.getElementById(s + 'Section') || document.getElementById(s + 'papersSection');
+        if (el) el.classList.add('hidden');
+      });
+      const target = document.getElementById(section + 'Section') || document.getElementById(section + 'papersSection');
+      if (target) target.classList.remove('hidden');
+      document.querySelectorAll('.pdf-viewer').forEach(f => { f.style.display = 'none'; f.src = ''; });
+    }
+
+    window.onload = function () {
+      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+      ['calendar', 'regulations', 'curriculum', 'modelpapers', 'previouspapers'].forEach(s => {
+        const el = document.getElementById(s + 'Section');
+        if (el) el.classList.add('hidden');
+      });
+      document.getElementById('welcomeSection').classList.remove('hidden');
+    };
+
+    function showPDF(section) {
+      const map = {
+        calendar: { sel: 'calendarSelect', frame: 'calendarPDF', folder: 'pdfs/' },
+        regulations: { sel: 'regulationSelectReg', frame: 'regulationsPDF', folder: 'pdfs/' },
+        curriculum: { sel: 'curriculumSelect', frame: 'curriculumPDF', folder: 'pdfs/' },
+        modelpapers: { sel: 'modelPaperSelect', frame: 'modelpapersPDF', folder: 'pdfs/modalpaper/' },
+        previouspapers: { sel: 'prevPaperSelect', frame: 'previouspapersPDF', folder: 'pdfs/previousyearpapers/' }
+      };
+      const { sel, frame, folder } = map[section];
+      const select = document.getElementById(sel);
+      const f = document.getElementById(frame);
+      if (select.value) { f.src = folder + select.value; f.style.display = 'block'; }
+      else { f.src = ''; f.style.display = 'none'; }
+    }
+  </script>
+</body>
+
+</html>
